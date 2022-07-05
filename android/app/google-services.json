@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "90275570415",
+    "project_id": "glades-12b38",
+    "storage_bucket": "glades-12b38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90275570415:android:ed34268cb0461be4d6311a",
+        "android_client_info": {
+          "package_name": "com.example.glades"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90275570415-vejfnu8hktiad188hcpgorucr5abn5u5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.glades",
+            "certificate_hash": "b2b4badf920cad852dea9e0ff8f3a0c105dbd66e"
+          }
+        },
+        {
+          "client_id": "90275570415-tlugl0g5glbquagshalksgifml0jaqsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Spq3ivGpJWwVYp_9k-vGLfoy60k0nsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90275570415-tlugl0g5glbquagshalksgifml0jaqsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
