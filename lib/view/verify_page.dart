@@ -177,6 +177,7 @@ class _VerifyPageState extends State<VerifyPage> {
                     child: ElevatedButton(
                         onPressed: () {
                           providerMainClass?.singleTransfer(
+                              context: context,
                               name: nameController.text.trim(),
                               amount: amountController.text.trim(),
                               narration: narrationController.text.trim(),
@@ -195,7 +196,7 @@ class _VerifyPageState extends State<VerifyPage> {
                               8,
                               163,
                             )),
-                        child: !loading
+                        child: providerMainClass!.isSingleLoading == true
                             ? const SpinKitWave(
                                 color: Colors.white,
                                 size: 32.0,
@@ -208,6 +209,49 @@ class _VerifyPageState extends State<VerifyPage> {
                                     fontWeight: FontWeight.w500),
                               )),
                   ),
+                  Visibility(
+                      visible: providerMainClass!.isSingleShow == true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50.0,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  providerMainClass?.verifyTransferResponse(
+                                      context: context, orderRef: orderRef);
+                                  
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    primary: const Color.fromARGB(
+                                      255,
+                                      11,
+                                      8,
+                                      163,
+                                    )),
+                                child:
+                                    providerMainClass!.isVerifyLoading == true
+                                        ? const SpinKitWave(
+                                            color: Colors.white,
+                                            size: 32.0,
+                                          )
+                                        : const Text(
+                                            'VERIFY SINGLE TRANSFER',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500),
+                                          )),
+                          ),
+                        ],
+                      ))
                 ],
               ),
             )

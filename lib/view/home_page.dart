@@ -26,18 +26,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  verifyAccount(context) {
-    if (bankController.text.isNotEmpty) {
-      providerMainClass!.verify(context, verifyNameController.text);
-    } else {
-      providerMainClass!.implSnackBar(context, 'Please select bank type');
-    }
-    setState(() {
-      loading = true;
-    });
-    print(bankController.text);
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               height: 10.h,
             ),
             SizedBox(
-              height: 10.h,
+              height: 8.h,
               child: TextFormField(
                 controller: bankController,
                 readOnly: true,
@@ -109,9 +97,10 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 10.h,
+              height: 8.h,
               child: ElevatedButton(
-                  onPressed: () => verifyAccount(context),
+                  onPressed: () => providerMainClass!
+                      .verify(context, verifyNameController.text),
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -122,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                         8,
                         163,
                       )),
-                  child: !loading
+                  child: providerMainClass!.isLoading == true
                       ? const SpinKitWave(
                           color: Colors.white,
                           size: 32.0,

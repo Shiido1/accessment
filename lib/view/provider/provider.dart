@@ -12,13 +12,22 @@ class ProviderMainClass with ChangeNotifier {
   final List _listValue = [];
   List get listValue => _listValue;
   bool _isShow = false;
-  // bool _isLoading = false;
+  bool _isVerifyShow = false;
+  bool _isSingleShow = false;
+  bool _isLoading = false;
+  bool _isVerifyLoading = false;
+  bool _isSingleLoading = false;
 
-  // bool get isLoading => _isLoading;
+  bool get isLoading => _isLoading;
+  bool get isVerifyLoading => _isVerifyLoading;
+  bool get isSingleLoading => _isSingleLoading;
   bool get isShow => _isShow;
+  bool get isSingleShow => _isSingleShow;
+  bool get isVerifyShow => _isVerifyShow;
 
   var verifyResponse;
   var singleTransferResponse;
+  var verifyTransferResponse;
 
   ProviderMainClass(this.repository);
 
@@ -58,20 +67,22 @@ class ProviderMainClass with ChangeNotifier {
       "bankcode": bankKey
     };
     try {
-      // _isLoading = true;
+      _isLoading = true;
       notifyListeners();
       verifyResponse = await repository.verify(inquireMap);
       if (verifyResponse["status"] == "success") {
+        _isShow = true;
+        notifyListeners();
+        _isLoading = false;
+        notifyListeners();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const VerifyPage()),
         );
-        _isShow = true;
-        // _isLoading = false;
+        notifyListeners();
       } else {
-        print('print response here $verifyResponse["message"]');
-        // _isLoading = false;
-        implSnackBar(context, verifyResponse["message"]);
+        _isLoading = false;
+        implSnackBar(context, 'Please select bank and try again later');
         notifyListeners();
       }
       notifyListeners();
@@ -98,18 +109,46 @@ class ProviderMainClass with ChangeNotifier {
       "orderRef": "$orderRef"
     };
     try {
-      // _isLoading = true;
+      _isSingleLoading = true;
       notifyListeners();
       singleTransferResponse = await repository.singleTransfer(inquireMap);
       if (singleTransferResponse["status"] == 200) {
+        _isSingleLoading = false;
+        notifyListeners();
         implSnackBar(context, singleTransferResponse["message"]);
-        _isShow = true;
-        // _isLoading = false;
+        notifyListeners();
+        _isSingleShow = true;
+        notifyListeners();
       } else {
         implSnackBar(context, singleTransferResponse["message"]);
         notifyListeners();
       }
-      // _isLoading = false;
+      _isSingleLoading = false;
+      notifyListeners();
+    } catch (e) {
+      throw (e.toString());
+    }
+    notifyListeners();
+  }
+
+  Future<void> verifyTransfer({context, String? orderRef}) async {
+    Map inquireMap = {"action": "verify", "txnRef": "$orderRef"};
+    try {
+      _isVerifyLoading = true;
+      notifyListeners();
+      verifyTransferResponse = await repository.singleTransfer(inquireMap);
+      if (verifyTransferResponse["status"] == 200) {
+        _isVerifyShow = true;
+        notifyListeners();
+        _isVerifyLoading = false;
+        notifyListeners();
+        implSnackBar(context, verifyTransferResponse["message"]);
+        notifyListeners();
+      } else {
+        implSnackBar(context, verifyTransferResponse["message"]);
+        notifyListeners();
+      }
+      _isVerifyLoading = false;
       notifyListeners();
     } catch (e) {
       throw (e.toString());
