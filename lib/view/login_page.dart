@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:glades/view/provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 // import 'package:glades/view/provider/google_sign_in.provider.dart';
 
@@ -15,6 +17,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  LoginProvider? loginProvider;
+
+  @override
+  void initState() {
+    loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 40,
                   ),
                   TextFormField(
-                    controller: emailController,
+                    controller: passwordController,
                     decoration: InputDecoration(
                       label: const Text('password'),
                       border: OutlineInputBorder(
@@ -97,13 +107,10 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
-                          );
-                        },
+                        onPressed: () => loginProvider!.login(
+                            context: context,
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim()),
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                               vertical: 4.w,

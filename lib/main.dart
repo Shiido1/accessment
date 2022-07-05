@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProviderMainClass(inject())),
-        // ChangeNotifierProvider(create: (_) => GoogleSignInProvider())
+        ChangeNotifierProvider(create: (_) => LoginProvider(inject()))
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

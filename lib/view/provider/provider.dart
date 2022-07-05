@@ -1,8 +1,22 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:glades/core/network/api_error.dart';
+import 'package:glades/view/home_page.dart';
 import 'package:glades/view/provider/model/global.model.dart';
 import 'package:glades/view/provider/repo.dart';
 import 'package:glades/view/verify_page.dart';
+
+implSnackBar(BuildContext context, String text) {
+  final snackBar = SnackBar(
+    content: Text(text),
+    backgroundColor: (Colors.black12),
+    action: SnackBarAction(
+      label: 'dismiss',
+      onPressed: () {},
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
 
 class ProviderMainClass with ChangeNotifier {
   final Repository repository;
@@ -31,18 +45,6 @@ class ProviderMainClass with ChangeNotifier {
 
   ProviderMainClass(this.repository);
 
-  implSnackBar(BuildContext context, String text) {
-    final snackBar = SnackBar(
-      content: Text(text),
-      backgroundColor: (Colors.black12),
-      action: SnackBarAction(
-        label: 'dismiss',
-        onPressed: () {},
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   Future<void> inquire({context, String? inquire}) async {
     Map inquireMap = {"inquire": inquire};
     try {
@@ -52,7 +54,6 @@ class ProviderMainClass with ChangeNotifier {
         _listKey.add(k);
         _listValue.add(v);
       });
-      implSnackBar(context, 'Welcome please select bank');
       notifyListeners();
     } catch (e) {
       rethrow;
@@ -113,12 +114,13 @@ class ProviderMainClass with ChangeNotifier {
       notifyListeners();
       singleTransferResponse = await repository.singleTransfer(inquireMap);
       if (singleTransferResponse["status"] == 200) {
+        _isSingleShow = true;
+        notifyListeners();
         _isSingleLoading = false;
         notifyListeners();
         implSnackBar(context, singleTransferResponse["message"]);
         notifyListeners();
-        _isSingleShow = true;
-        notifyListeners();
+        
       } else {
         implSnackBar(context, singleTransferResponse["message"]);
         notifyListeners();
@@ -154,5 +156,34 @@ class ProviderMainClass with ChangeNotifier {
       throw (e.toString());
     }
     notifyListeners();
+  }
+}
+
+class LoginProvider with ChangeNotifier {
+  final LoginRepo loginRepo;
+
+  LoginProvider(this.loginRepo);
+
+  Future<Response?> login({context, String? email, String? password}) async {
+    Map login = {"email": email, "password": password};
+    Response res;
+    try {
+      res = await loginRepo.login(login);
+      if (res.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+        notifyListeners();
+        implSnackBar(context, 'Welcome please select bank');
+        notifyListeners();
+      } else {
+        print('print login failed res $res');
+      }
+    } catch (e) {
+      rethrow;
+    }
+    notifyListeners();
+    return res;
   }
 }

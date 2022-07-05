@@ -222,7 +222,7 @@ class _VerifyPageState extends State<VerifyPage> {
                             height: 50.0,
                             child: ElevatedButton(
                                 onPressed: () {
-                                  providerMainClass?.verifyTransferResponse(
+                                  providerMainClass?.verifyTransfer(
                                       context: context, orderRef: orderRef);
                                   
                                 },

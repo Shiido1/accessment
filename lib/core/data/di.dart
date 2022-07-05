@@ -26,14 +26,18 @@ Future<void> _initializeCore() async {
 void _initProviders() {
   inject.registerLazySingleton<ProviderMainClass>(
       () => ProviderMainClass(inject()));
-  // inject.registerLazySingleton<GoogleSignInProvider>(
-  //     () => GoogleSignInProvider());
+  inject.registerLazySingleton<LoginProvider>(
+      () => LoginProvider(inject()));
 }
 
 /// Initialize services's here
 void _initServices() {
   inject.registerLazySingleton<NetworkService>(
       () => NetworkService(baseUrl: AppConfig.coreBaseUrl));
+  inject.registerLazySingleton<NetworkLoginService>(
+      () => NetworkLoginService(baseUrl: AppConfig.coreLoginBaseUrl));
   inject.registerLazySingleton<Repository>(
       () => Repository(networkService: inject()));
+  inject.registerLazySingleton<LoginRepo>(
+      () => LoginRepo(networkLoginService: inject()));
 }

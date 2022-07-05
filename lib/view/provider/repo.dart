@@ -45,3 +45,22 @@ class Repository {
     }
   }
 }
+
+class LoginRepo {
+  final NetworkLoginService _networkLoginService;
+
+  LoginRepo({ required NetworkLoginService networkLoginService}):_networkLoginService = networkLoginService;
+
+  Future<Response>login(Map inquireEntity) async {
+    try {
+      print('object');
+      Response response = await _networkLoginService
+          .call(UrlConfig.login, RequestLoginMethod.post, data: inquireEntity);
+      print("i fill not $response");
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+}
