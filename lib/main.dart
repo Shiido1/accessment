@@ -11,7 +11,6 @@ import 'core/network/app_config.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeCore(environment: Environment.staging);
-  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

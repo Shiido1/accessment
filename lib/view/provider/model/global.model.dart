@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 String? bank;
 String? bankKey;
 String? orderRef;
-TextEditingController bankController =
-    TextEditingController(text: 'Select Bank Type');
+TextEditingController bankController = TextEditingController();
 
-TextEditingController verifyNameController =
-    TextEditingController(text: "accountname");
+TextEditingController verifyNameController = TextEditingController();

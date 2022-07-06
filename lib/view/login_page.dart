@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glades/view/provider/provider.dart';
+import 'package:glades/view/widget/color.dart';
+import 'package:glades/view/widget/texr_form_field.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 // import 'package:glades/view/provider/google_sign_in.provider.dart';
 
+import '../core/validator.dart';
 import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
 
   LoginProvider? loginProvider;
+
+  final _globalKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -36,104 +42,110 @@ class _LoginPageState extends State<LoginPage> {
             "GLADES",
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: const Color.fromARGB(255, 11, 8, 163),
+          backgroundColor: AppColor.primary,
         ),
-        body: Center(
-          child: SingleChildScrollView(
-              padding: const EdgeInsets.all(22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'LOGIN',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 11, 8, 163),
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      label: const Text('email'),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+        body: Form(
+          key: _globalKey,
+          child: Center(
+            child: SingleChildScrollView(
+                padding: const EdgeInsets.all(22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'LOGIN',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 11, 8, 163),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    EditTextForm(
+                      controller: emailController,
+                      validator: Validators.validateString(),
+                      label: 'email',
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    EditTextForm(
+                      controller: passwordController,
+                      validator: Validators.validateString(),
+                      label: 'password',
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    InkWell(
+                      onTap: () => implSnackBar(
+                          context, 'You can\'t sign in using Google for now'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/google.svg',
+                            width: 34,
+                            height: 34,
+                          ),
+                          SizedBox(
+                            width: 2.h,
+                          ),
+                          Text(
+                            'Sign in with Google',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      label: const Text('password'),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                    SizedBox(
+                      height: 10.h,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/google.svg',
-                          width: 34,
-                          height: 34,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                        onPressed: () => loginProvider!.login(
-                            context: context,
-                            email: emailController.text.trim(),
-                            password: passwordController.text.trim()),
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 4.w,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            primary: const Color.fromARGB(
-                              255,
-                              11,
-                              8,
-                              163,
-                            )),
-                        child: Text(
-                          'SUBMIT',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold),
-                        )),
-                  )
-                ],
-              )),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (_globalKey.currentState!.validate()) {
+                              loginProvider!.login(
+                                  context: context,
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim());
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 4.w,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              primary: AppColor.primary),
+                          child: Consumer<LoginProvider>(
+                            builder: (_, provider, __) {
+                              return provider.isLogin
+                                  ? SpinKitWave(
+                                      color: Colors.white,
+                                      size: 25.sp,
+                                    )
+                                  : Text(
+                                      'SUBMIT',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                            },
+                          )),
+                    )
+                  ],
+                )),
+          ),
         ),
       ),
     );

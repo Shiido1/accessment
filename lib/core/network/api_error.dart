@@ -59,9 +59,15 @@ class ApiError {
   String extractDescriptionFromResponse(Response<dynamic>? response) {
     String message = "";
     errorType = response?.statusCode;
+    logger.d(errorType);
     logger.d(response!.data);
     switch (errorType) {
+      case 104:
+        message = ApiErrorModel.fromJson(response.data).message!;
+        break;
       case 400:
+        message = ApiErrorModel.fromJson(response.data).message!;
+        break;
       case 404:
         message = ApiErrorModel.fromJson(response.data).message!;
         break;

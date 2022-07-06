@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:glades/core/network/api_error.dart';
 import 'package:glades/view/home_page.dart';
 import 'package:glades/view/provider/model/global.model.dart';
 import 'package:glades/view/provider/repo.dart';
@@ -84,11 +83,11 @@ class ProviderMainClass with ChangeNotifier {
       } else {
         _isLoading = false;
         implSnackBar(context, 'Please select bank and try again later');
-        notifyListeners();
       }
-      notifyListeners();
-      logger.d(verifyResponse);
     } catch (e) {
+      implSnackBar(context, e.toString());
+      _isLoading = false;
+      notifyListeners();
       throw (e.toString());
     }
     notifyListeners();
@@ -120,7 +119,6 @@ class ProviderMainClass with ChangeNotifier {
         notifyListeners();
         implSnackBar(context, singleTransferResponse["message"]);
         notifyListeners();
-        
       } else {
         implSnackBar(context, singleTransferResponse["message"]);
         notifyListeners();
@@ -128,6 +126,9 @@ class ProviderMainClass with ChangeNotifier {
       _isSingleLoading = false;
       notifyListeners();
     } catch (e) {
+      _isSingleLoading = false;
+      implSnackBar(context, e.toString());
+      notifyListeners();
       throw (e.toString());
     }
     notifyListeners();
@@ -153,6 +154,8 @@ class ProviderMainClass with ChangeNotifier {
       _isVerifyLoading = false;
       notifyListeners();
     } catch (e) {
+      implSnackBar(context, e.toString());
+      notifyListeners();
       throw (e.toString());
     }
     notifyListeners();
@@ -161,6 +164,7 @@ class ProviderMainClass with ChangeNotifier {
 
 class LoginProvider with ChangeNotifier {
   final LoginRepo loginRepo;
+  bool isLogin = false;
 
   LoginProvider(this.loginRepo);
 
@@ -168,19 +172,22 @@ class LoginProvider with ChangeNotifier {
     Map login = {"email": email, "password": password};
     Response res;
     try {
+      isLogin = true;
+      notifyListeners();
       res = await loginRepo.login(login);
       if (res.statusCode == 200) {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
-        notifyListeners();
+        isLogin = false;
         implSnackBar(context, 'Welcome please select bank');
         notifyListeners();
-      } else {
-        print('print login failed res $res');
       }
     } catch (e) {
+      isLogin = false;
+      implSnackBar(context, e.toString());
+      notifyListeners();
       rethrow;
     }
     notifyListeners();
