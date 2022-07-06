@@ -45,9 +45,9 @@ class _HomePageState extends State<HomePage> {
         ),
         title: const Text(
           "GLADES",
-          style: TextStyle(color:  AppColor.white),
+          style: TextStyle(color: AppColor.white),
         ),
-        backgroundColor:  AppColor.primary,
+        backgroundColor: AppColor.primary,
       ),
       body: Form(
         key: _globalKey,
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       if (_globalKey.currentState!.validate()) {
                         providerMainClass!
-                            .verify(context, verifyNameController.text);
+                            .verify(context, verifyNameController.text.trim());
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                           : Text(
                               'VERIFY ACCOUNT NAME',
                               style: TextStyle(
-                                  color:  AppColor.white,
+                                  color: AppColor.white,
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.w500),
                             );

@@ -195,6 +195,9 @@ class _VerifyPageState extends State<VerifyPage> {
                           ],
                         ));
                   },
+                ),
+                SizedBox(
+                  height: 10.h,
                 )
               ],
             )
